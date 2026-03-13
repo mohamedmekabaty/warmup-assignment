@@ -6,6 +6,30 @@ const fs = require("fs");
 // endTime: (typeof string) formatted as hh:mm:ss am or hh:mm:ss pm
 // Returns: string formatted as h:mm:ss
 // ============================================================
+
+// Helper: Parse AM/PM time strictly into seconds since midnight
+function parseToSeconds(timeStr) {
+    let [time, modifier] = timeStr.split(' ');
+    let [hours, minutes, seconds] = time.split(':').map(Number);
+    if (hours === 12) hours = 0;
+    if (modifier.toLowerCase() === 'pm') hours += 12;
+    return hours * 3600 + minutes * 60 + seconds;
+}
+
+// Helper: Parse duration string "h:mm:ss" into total seconds
+function parseDurationToSeconds(timeStr) {
+    let parts = timeStr.split(':').map(Number);
+    return parts[0] * 3600 + parts[1] * 60 + parts[2];
+}
+
+// Helper: Format total seconds back into "h:mm:ss"
+function formatSeconds(totalSeconds) {
+    let hours = Math.floor(totalSeconds / 3600);
+    let minutes = Math.floor((totalSeconds % 3600) / 60);
+    let seconds = totalSeconds % 60;
+    return `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+    
 function getShiftDuration(startTime, endTime) {
     // TODO: Implement this function
 }
